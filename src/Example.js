@@ -1,7 +1,7 @@
-const Example = ()=> {
-    return(
+const Example = () => {
+    return (
         <div>
-            
+
         </div>
     )
 }

@@ -1,0 +1,28 @@
+.navigation {
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.navigation .topnav {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+}
+
+.navigation button {
+    color: #ffffff;
+    outline: none;
+    border: 1px solid #494949;
+    padding: 10px;
+    border-radius: 10px;
+
+    background-color: transparent;
+}
+
+.navigation button:hover {
+    background-color: #ffffff;
+    color: #494949;
+}
