@@ -1,0 +1,44 @@
+.eachConversation {
+    margin: 0;
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 auto;
+
+}
+
+.eachConversation .chat-content {
+    display: flex;
+    padding: 20px;
+    gap: 10px;
+}
+
+.eachConversation .chat-actions {
+    display: inline-flex;
+    gap: 10px;
+    padding: 0 30px 0 0;
+}
+
+.eachConversation>div {
+    display: flex;
+}
+
+.type1 {
+    background: #40414f;
+}
+
+.chat-actions {
+    display: flex;
+    align-items: center;
+}
+
+.chat-actions .btn {
+    height: max-content;
+    padding: 10px;
+    border-radius: 50px;
+}
+
+.chat-actions .btn:hover {
+    background: #65696d;
+}
