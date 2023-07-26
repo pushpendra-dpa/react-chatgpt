@@ -1,12 +1,15 @@
 import './App.css';
+import Navigation from './Navigation';
+import Example from './Example';
+import Prompt from './Prompt';
 
 function App() {
   return (
     <div className="App">
-      <div> Navigation </div>
+      <Navigation />
       <div>
-        <div>Hello</div>
-        <div>Input</div>
+        <Example />
+        <Prompt />
       </div>
     </div>
   );
