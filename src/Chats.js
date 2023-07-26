@@ -11,12 +11,12 @@ const EachChat = ({ eachChat }) => {
             <div className="chat-content"><div><img src={eachChat.type == 1 ? UserSVG : ServerSVG} width={"24px"} /></div>
                 {eachChat.type == 1 ? "User" : "Robot"} conversation
             </div>
-            <div className="chat-actions">
+        {eachChat.type == 2 ?             <div className="chat-actions">
                 <button className="btn"><img src={PasteSVG} width={"16px"} className="pst-btn" /></button>
 
                 <button className="btn"><img src={LikeSVG} width={"16px"} className="like-btn" /></button>
                 <button className="btn"><img src={DislikeSVG} width={"16px"} className="dislike-btn" /></button>
-            </div>
+            </div> : ''}
 
 
 
