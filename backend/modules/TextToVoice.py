@@ -1,7 +1,7 @@
 import requests
 import os
 
-endpoint = "https://api.elevenlabs.io/v1/text-to-speech/"+str(os.getenv("ELEVENLABS_VOICE_ID"))
+endpoint = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM/"
 headers = {
     "accept": "audio/mpeg",
     "xi-api-key": os.getenv("ELEVENLABS_APIKEY"),
@@ -9,7 +9,25 @@ headers = {
 }
 
 def TextToVoice(text):
-    body=({"text": "Hi! My name is Bella, nice to meet you!","model_id": "eleven_monolingual_v1","voice_settings": {"stability": 0.5,"similarity_boost": 0.5}})
+    
+    url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
 
-    response = requests.post(endpoint, json=body, headers=headers)
+    headers = {
+    "Accept": "audio/mpeg",
+    "Content-Type": "application/json",
+    "xi-api-key": "1c8f12e3de7aadea0c0ee1f025156c05"
+    }
+    print(text)
+    data = {
+    "text": text,
+    "model_id": "eleven_monolingual_v1",
+    "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.5
+    }
+    }
+    response = requests.post(url, json=data, headers=headers)
+    print(response.headers)
     return response
+
+
