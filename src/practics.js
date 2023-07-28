@@ -1,30 +1,54 @@
-import "./prompt.css"
-import MicSVG from "./assets/mic.svg"
-import SendSVG from "./assets/send.svg"
-import { ReactMediaRecorder } from "react-media-recorder";
+
+
+import RecordIcon from "./RecordIcon.js"
+
 import React from 'react'
+
 import axios from 'axios'
 
+function RecordMessage() {
 
-const Prompt = ({ setState, state }) => {
+
 
     const [TotalMessages, SetTotal] = React.useState([])
 
     function ConvertBlobToUrl(data) {
+
         const blob = new Blob([data], { type: "audio/mpeg" })
+
         const rachelblobUrl = window.URL.createObjectURL(blob)
+
         return rachelblobUrl
+
+
+
+
+
+
+
     }
 
+
+
     const handleStop = async (mediaBlobUrl) => {
+
         console.log(mediaBlobUrl)
+
         const myMessage = { "sender": "me", "audiobloburl": mediaBlobUrl }
+
         const collectionOfMessages = [...TotalMessages, myMessage]
+
+        //collectionOfMessages.push(myMessage)
+
 
 
         const response = await fetch(mediaBlobUrl)
+
         const raw_data = await response.blob()
+
         console.log(raw_data)
+
+
 
         const form = new FormData()
 
@@ -35,43 +59,195 @@ const Prompt = ({ setState, state }) => {
             {
 
                 headers: { "Content-Type": "audio/mpeg" },
+
                 responseType: "arraybuffer"
+
+
+
+
+
 
 
             }
 
         )
 
+
+
         console.log(res)
 
+
+
         const binary_file = res.data
+
         const rachelUrl = ConvertBlobToUrl(binary_file)
+
         const rachelMessage = { sender: "rachel", audiobloburl: rachelUrl }
+
         collectionOfMessages.push(rachelMessage)
 
+
+
         console.log(collectionOfMessages)
+
         SetTotal(collectionOfMessages)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-    return <div className="main-prompt">
-        <div>
-            <input type="text" placeholder="Please Type here your prompt..." />
-            <div className="mic" onClick={() => setState(prev => { return { ...prev, isNewSession: false } })}>
-                <img src={SendSVG} width={"24px"} />
+
+    return (
+
+        <>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="mt-5 px-5">
+
+                {
+
+
+
+                    TotalMessages.map((audio) => {
+
+
+
+                        return (
+
+
+
+                            <div class={audio.sender == "me" ?
+
+                                "flex flex-col " : "flex flex-col items-end"}>
+
+
+
+                                <div >
+
+                                    <p class={audio.sender == "me" ?
+
+                                        "text-blue-500" : "text-right text-green-500"}>{audio.sender}</p>
+
+
+
+                                    <audio src={audio.audiobloburl} controls />
+
+
+
+
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+                        )
+
+
+
+
+
+
+
+
+
+                    })
+
+
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+
+
             </div>
-            <div className="mic">
-                <ReactMediaRecorder
-                    audio
-                    onStop={handleStop}
-                    render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
-                        <div onMouseDown={startRecording} onMouseUp={stopRecording}>
-                            <img src={MicSVG} width={"24px"} />
-                        </div>
-                    )}
-                />
+
+
+
+
+
+            <div class="fixed bottom-0 w-full py-6 border-t text-center bg-gradient-to-r from-sky-500 to-green-500">
+
+                <div class="flex justify-center items-center w-full">
+
+
+
+                    <RecordIcon paramStop={handleStop} />
+
+                </div>
+
             </div>
-        </div>
-    </div>
+
+
+
+        </>
+
+    )
+
 }
 
-export default Prompt;
+
+
+export default RecordMessage
