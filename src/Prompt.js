@@ -4,7 +4,7 @@ import SendSVG from "./assets/send.svg"
 import { Tooltip, message } from "antd/es"
 import { ReactMediaRecorder } from "react-media-recorder"
 import { useState } from "react"
-const Prompt = ({ setState, state, getChatGPTAnswer }) => {
+const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
     const [text, setText] = useState('')
     /*
     
@@ -23,6 +23,9 @@ const Prompt = ({ setState, state, getChatGPTAnswer }) => {
     
 
    }
+   const onRecordStop = (blobURL, blob)=>{
+    onStop(blobURL, blob)
+   }
     return <div className="main-prompt">
         <div>
             <input type="text" onChange={e=>setText(e.target.value)} value={text} placeholder="Please Type here your prompt..." />
@@ -35,6 +38,7 @@ const Prompt = ({ setState, state, getChatGPTAnswer }) => {
                 <div>
                 <ReactMediaRecorder
                     audio
+                    onStop={onRecordStop}
                     render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
                         <div onMouseDown={startRecording} onMouseUp={stopRecording}>
                             <Tooltip title={status}>                    

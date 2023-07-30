@@ -5,11 +5,12 @@ import PasteSVG from "./assets/paste.svg"
 import LikeSVG from "./assets/like.svg"
 import DislikeSVG from "./assets/dislike.svg"
 const EachChat = ({ eachChat }) => {
+    const AudioJSX = (url)=>(<div><audio src={url} width={500} height={500} controls /></div>)
     return <div className={(eachChat.type == 1 ? "type1" : "type2") + " eachConversation"} style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ width: "50%", display: "flex", justifyContent: "space-between" }}>
 
             <div className="chat-content"><div><img src={eachChat.type == 1 ? UserSVG : ServerSVG} width={"24px"} style={{minWidth:'24px'}} /></div>
-                {eachChat.content}
+                {eachChat.contentType !== 'audio' ? <>{eachChat.content}</> : AudioJSX(eachChat.url)}   
             </div>
         {eachChat.type == 2 ?             <div className="chat-actions">
                 <button className="btn"><img src={PasteSVG} width={"16px"} className="pst-btn" /></button>
