@@ -10,5 +10,5 @@ def ChatGPTAsk(text):
         {"role": "user", "content": text}
     ]
     )
-
+    print(completion)
     return completion.choices[0].message
