@@ -8,8 +8,8 @@ const EachChat = ({ eachChat }) => {
     return <div className={(eachChat.type == 1 ? "type1" : "type2") + " eachConversation"} style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ width: "50%", display: "flex", justifyContent: "space-between" }}>
 
-            <div className="chat-content"><div><img src={eachChat.type == 1 ? UserSVG : ServerSVG} width={"24px"} /></div>
-                {eachChat.type == 1 ? "User" : "Robot"} conversation
+            <div className="chat-content"><div><img src={eachChat.type == 1 ? UserSVG : ServerSVG} width={"24px"} style={{minWidth:'24px'}} /></div>
+                {eachChat.content}
             </div>
         {eachChat.type == 2 ?             <div className="chat-actions">
                 <button className="btn"><img src={PasteSVG} width={"16px"} className="pst-btn" /></button>
@@ -24,31 +24,11 @@ const EachChat = ({ eachChat }) => {
         </div>
     </div>
 }
-const Chats = () => {
-    const chats = [
-        { type: 1 },
-        { type: 2 },
-        { type: 1 },
-        { type: 2 },
-        { type: 1 },
-        { type: 2 },
-        { type: 1 },
-        { type: 2 },
-        { type: 1 },
-        { type: 2 },
-        { type: 1 },
-        { type: 2 },
-        { type: 1 },
-        { type: 2 },
-        { type: 2 },
-        { type: 1 },
-        { type: 2 },
-        { type: 1 },
-        { type: 2 },
-    ]
+const Chats = ({content}) => {
+    
     return <div >
         <div className="conversations" style={{ height: "calc(100vh)", overflowY: "scroll", paddingBottom: "75px" }}>
-            {chats.map((eachChat, eachIndex) => {
+            { content && content.map((eachChat, eachIndex) => {
                 return <EachChat eachChat={eachChat} key={eachIndex} />
             })}
         </div>

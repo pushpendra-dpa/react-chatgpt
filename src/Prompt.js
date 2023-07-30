@@ -1,16 +1,51 @@
 import "./prompt.css"
 import MicSVG from "./assets/mic.svg"
 import SendSVG from "./assets/send.svg"
-const Prompt = ({ setState, state }) => {
+import { Tooltip, message } from "antd/es"
+import { ReactMediaRecorder } from "react-media-recorder"
+import { useState } from "react"
+const Prompt = ({ setState, state, getChatGPTAnswer }) => {
+    const [text, setText] = useState('')
+    /*
+    
+    */
+   const onTextAsk = ()=>{
+    if(text.length > 0){
+        setState(prev=>{
+            return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 1, content: text}]}}
+          })
+        getChatGPTAnswer(text)
+        setText('')
 
+    }else{
+        message.info("Please type something")
+    }
+    
+
+   }
     return <div className="main-prompt">
         <div>
-            <input type="text" placeholder="Please Type here your prompt..." />
-            <div className="mic" onClick={() => setState(prev => { return { ...prev, isNewSession: false } })}>
-                <img src={SendSVG} width={"24px"} />
+            <input type="text" onChange={e=>setText(e.target.value)} value={text} placeholder="Please Type here your prompt..." />
+            <div className="mic" onClick={onTextAsk}>
+                <div   >              
+                    <img src={SendSVG} width={"24px"} />
+                </div>
             </div>
             <div className="mic">
-                <img src={MicSVG} width={"24px"} />
+                <div>
+                <ReactMediaRecorder
+                    audio
+                    render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
+                        <div onMouseDown={startRecording} onMouseUp={stopRecording}>
+                            <Tooltip title={status}>                    
+                                <img src={MicSVG} width={"24px"} />
+                            </Tooltip>
+
+                        </div>
+                    )}
+                    />
+                    
+                </div>
             </div>
         </div>
     </div>
