@@ -15,7 +15,6 @@
 .navigation button {
     color: #ffffff;
     outline: none;
-    border: 1px solid #494949;
     padding: 10px;
     border-radius: 10px;
 
@@ -25,7 +24,7 @@
 }
 
 .navigation button:hover {
-    background-color: #575757;
+    background-color: #343434;
     color: #ffffff;
 }
 button.disabled{

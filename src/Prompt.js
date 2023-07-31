@@ -20,8 +20,9 @@ const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
         setState(prev=>{
             return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 1, content: text}]}}
           })
-        await getChatGPTAnswer(text)
+
         setText('')
+        await getChatGPTAnswer(text)
         setIsLoading(prev=>{
             return {...prev, isText: false, isMic: false}
         })
@@ -55,7 +56,7 @@ const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
                     audio
                     onStop={onRecordStop}
                     render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
-                        <div onMouseDown={(isLoading.isText || isLoading.isMic) === false ? startRecording : ()=>{ message.info("Please Wait prev Request is processing!") }} onMouseUp={ (isLoading.isText || isLoading.isMic) ? stopRecording : ()=>{ message.info("Please Wait prev Request is processing!") }}>
+                        <div onMouseDown={startRecording} onMouseUp={ stopRecording }>
                             <Tooltip title={status}>         
                             {isLoading.isText ? <LoadingOutlined style={{ fontSize: 24 }} spin /> :  <img src={MicSVG} width={"24px"} /> }
                                
