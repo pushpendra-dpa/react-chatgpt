@@ -1,21 +1,31 @@
 import "./prompt.css"
 import MicSVG from "./assets/mic.svg"
 import SendSVG from "./assets/send.svg"
-import { Tooltip, message } from "antd/es"
+import { Spin, Tooltip, message } from "antd/es"
 import { ReactMediaRecorder } from "react-media-recorder"
 import { useState } from "react"
+import { LoadingOutlined } from "@ant-design/icons"
 const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
     const [text, setText] = useState('')
+    const [isLoading, setIsLoading] = useState({isText: false, isMic: false})
     /*
     
     */
-   const onTextAsk = ()=>{
+   const onTextAsk = async ()=>{
     if(text.length > 0){
+        console.log("BEFORE")
+        setIsLoading(prev=>{
+            return {...prev, isText: true, isMic: true}
+        })
         setState(prev=>{
             return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 1, content: text}]}}
           })
-        getChatGPTAnswer(text)
+        await getChatGPTAnswer(text)
         setText('')
+        setIsLoading(prev=>{
+            return {...prev, isText: false, isMic: false}
+        })
+        console.log("AFTER")
 
     }else{
         message.info("Please type something")
@@ -33,10 +43,10 @@ const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
    }
     return <div className="main-prompt">
         <div>
-            <input type="text" onKeyUp={onEnterKey} onChange={e=>setText(e.target.value)} value={text} placeholder="Please Type here your prompt..." />
-            <div className="mic" onClick={onTextAsk}>
+            <input type="text" disabled={isLoading.isMic || isLoading.isText} onKeyUp={onEnterKey} onChange={e=>setText(e.target.value)} value={text} placeholder="Please Type here your prompt..." />
+            <div className="mic" onClick={(isLoading.isMic || isLoading.isText) ? ()=>message.info("Please Wait prev Request is processing!") : onTextAsk}>
                 <div   >              
-                    <img src={SendSVG} width={"24px"} />
+                    {isLoading.isText ? <LoadingOutlined style={{ fontSize: 24 }} spin /> : <img src={SendSVG} width={"24px"} />}
                 </div>
             </div>
             <div className="mic">
@@ -45,9 +55,10 @@ const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
                     audio
                     onStop={onRecordStop}
                     render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
-                        <div onMouseDown={startRecording} onMouseUp={stopRecording}>
-                            <Tooltip title={status}>                    
-                                <img src={MicSVG} width={"24px"} />
+                        <div onMouseDown={(isLoading.isText || isLoading.isMic) === false ? startRecording : ()=>{ message.info("Please Wait prev Request is processing!") }} onMouseUp={ (isLoading.isText || isLoading.isMic) ? stopRecording : ()=>{ message.info("Please Wait prev Request is processing!") }}>
+                            <Tooltip title={status}>         
+                            {isLoading.isText ? <LoadingOutlined style={{ fontSize: 24 }} spin /> :  <img src={MicSVG} width={"24px"} /> }
+                               
                             </Tooltip>
 
                         </div>
