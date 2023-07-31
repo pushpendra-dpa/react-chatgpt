@@ -15,7 +15,7 @@ def TextToVoice(text):
     headers = {
     "Accept": "audio/mpeg",
     "Content-Type": "application/json",
-    "xi-api-key": "1c8f12e3de7aadea0c0ee1f025156c05"
+    "xi-api-key":os.getenv("ELEVENLABS_APIKEY")
     }
     print(text)
     data = {

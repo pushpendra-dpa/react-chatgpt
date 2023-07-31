@@ -5,7 +5,7 @@ import Prompt from './Prompt';
 import Chats from './Chats';
 import { useEffect, useState } from 'react';
 import { message } from 'antd';
-
+let host = "https://chatgpt-server.pushpendrahpx.me/"
 function App() {
   const [state, setState] = useState({ isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())}}`, data: []}, previousConversations: []})
   useEffect(()=>{
@@ -24,7 +24,7 @@ function App() {
     }
   },[])
   const getChatGPTAnswer = async (text)=>{
-    let response = await fetch("https://pushpendra-dpa-musical-space-giggle-wr7rr4qgv9x6hg9g6-8000.preview.app.github.dev/ask/",{
+    let response = await fetch(host+"ask/",{
       method:"POST",
       headers:{
         'content-type':'application/json'
@@ -42,7 +42,7 @@ function App() {
   })
   let formData = new FormData()
   formData.append("file", blob)
-  let response = await fetch("https://pushpendra-dpa-musical-space-giggle-wr7rr4qgv9x6hg9g6-8000.preview.app.github.dev/uploadfile/",{
+  let response = await fetch(host+"uploadfile/",{
     method:"POST",
     headers:{
       'responseType':'arraybuffer'
