@@ -11,7 +11,6 @@ const Navigation = () => {
     return <div style={{ background: "#202123" }} className="navigation">
         <div className="topnav">
             <button>New Chat</button>
-            <button>Toggle</button>
         </div>
         <div>
             <div style={{ padding: "10px", fontSize: '24px' }}>Previous conversations</div>

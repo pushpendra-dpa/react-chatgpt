@@ -10,18 +10,20 @@ function App() {
   const [state, setState] = useState({ isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())}}`, data: []}, previousConversations: []})
   useEffect(()=>{
     console.log("S", state)
+    if(state.conversation.data.length > 0)
     localStorage.setItem("store", JSON.stringify(state))
   },[state])
   useEffect(()=>{
-    if(state.previousConversations.length == 0){
       let data = localStorage.getItem("store")
+      console.log("INIT",data)
       if(data){
+        
         let json = JSON.parse(data)
+        console.log(json)
         if(json){
           setState(json)
         }
       }
-    }
   },[])
   const getChatGPTAnswer = async (text)=>{
     let response = await fetch(host+"ask/",{
