@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { message } from 'antd';
 let host = "https://chatgpt-server.pushpendrahpx.me/"
 function App() {
-  const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())}`, data: []}, previousConversations: []})
+  const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())`, data: []}, previousConversations: []})
  
   useEffect(()=>{
       let data = localStorage.getItem("store")
