@@ -7,9 +7,9 @@ const ExampleList = () => {
                     </svg>Examples</h2>
 
                 <ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <button class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">"Find restaurants near me" →</button>
-                    <button class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">"Tell me a joke" →</button>
-                    <button class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">"How does a blockchain work?" →</button></ul>
+                    <button class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900" style={{color:"white"}}>"Find restaurants near me" →</button>
+                    <button class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900" style={{color:"white"}}>"Tell me a joke" →</button>
+                    <button class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900" style={{color:"white"}}>"How does a blockchain work?" →</button></ul>
             </div>
             <div class="flex flex-col mb-8 md:mb-auto  flex-1 pt-16 pl-5 ">
                 <h2 class="flex gap-3 items-center m-auto text-2xl font-normal md:flex-col md:gap-2 pb-3.5">
