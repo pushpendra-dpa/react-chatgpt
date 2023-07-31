@@ -26,9 +26,14 @@ const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
    const onRecordStop = (blobURL, blob)=>{
     onStop(blobURL, blob)
    }
+   const onEnterKey = (e)=>{
+    if(e.keyCode === 13){
+        onTextAsk()
+    }
+   }
     return <div className="main-prompt">
         <div>
-            <input type="text" onChange={e=>setText(e.target.value)} value={text} placeholder="Please Type here your prompt..." />
+            <input type="text" onKeyUp={onEnterKey} onChange={e=>setText(e.target.value)} value={text} placeholder="Please Type here your prompt..." />
             <div className="mic" onClick={onTextAsk}>
                 <div   >              
                     <img src={SendSVG} width={"24px"} />
