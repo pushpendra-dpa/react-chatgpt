@@ -7,12 +7,8 @@ import { useEffect, useState } from 'react';
 import { message } from 'antd';
 let host = "https://chatgpt-server.pushpendrahpx.me/"
 function App() {
-  const [state, setState] = useState({ isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())}}`, data: []}, previousConversations: []})
-  useEffect(()=>{
-    console.log("S", state)
-    if(state.conversation.data.length > 0)
-    localStorage.setItem("store", JSON.stringify(state))
-  },[state])
+  const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())}`, data: []}, previousConversations: []})
+ 
   useEffect(()=>{
       let data = localStorage.getItem("store")
       console.log("INIT",data)
@@ -21,21 +17,33 @@ function App() {
         let json = JSON.parse(data)
         console.log(json)
         if(json){
+          json.isLoaded = true
           setState(json)
         }
       }
   },[])
+  useEffect(()=>{
+    console.log("AFTER2")
+    localStorage.setItem("store", JSON.stringify(state))
+  },[state])
   const getChatGPTAnswer = async (text)=>{
-    let response = await fetch(host+"ask/",{
-      method:"POST",
-      headers:{
-        'content-type':'application/json'
-      },
-      body: JSON.stringify({content: text})
-    })
-    let data = await response.json()
-    setState(prev=>{
-      return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 2, content: data.content}]}}
+    return new Promise(async (resolve, reject)=>{
+      try {
+        let response = await fetch(host+"ask/",{
+          method:"POST",
+          headers:{
+            'content-type':'application/json'
+          },
+          body: JSON.stringify({content: text})
+        })
+        let data = await response.json()
+        setState(prev=>{
+          return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 2, content: data.content}]}}
+        })
+        resolve(true)
+      } catch (error) {
+        reject(false)
+      }
     })
   }
  const onStop = async (blobURL, blob)=>{
@@ -66,7 +74,7 @@ function App() {
  } 
   return (
     <div className="App">
-      <Navigation />
+      <Navigation state={state} setState={setState}/>
       <div className='main-screen'>
         {state.conversation.data.length == 0 ? <Example /> : <Chats content={state.conversation.data} />}
         <Prompt setState={setState} state={state} getChatGPTAnswer={getChatGPTAnswer} onStop={onStop} />

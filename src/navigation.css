@@ -20,9 +20,16 @@
     border-radius: 10px;
 
     background-color: transparent;
+
+    transition-duration: 250ms;
 }
 
 .navigation button:hover {
-    background-color: #ffffff;
-    color: #494949;
+    background-color: #575757;
+    color: #ffffff;
+}
+button.disabled{
+    background-color: transparent !important;
+    color: #ffffff !important;
+    cursor: not-allowed;
 }

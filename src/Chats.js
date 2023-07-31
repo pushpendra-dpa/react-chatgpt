@@ -4,6 +4,7 @@ import ServerSVG from "./assets/server.svg"
 import PasteSVG from "./assets/paste.svg"
 import LikeSVG from "./assets/like.svg"
 import DislikeSVG from "./assets/dislike.svg"
+import { Tooltip } from "antd"
 const EachChat = ({ eachChat }) => {
     const AudioJSX = (url)=>(<div><audio src={url} width={500} height={500} controls /></div>)
     return <div className={(eachChat.type == 1 ? "type1" : "type2") + " eachConversation"} style={{ display: "flex", justifyContent: "center" }}>
@@ -13,11 +14,14 @@ const EachChat = ({ eachChat }) => {
                 {eachChat.contentType !== 'audio' ? <>{eachChat.content}</> : AudioJSX(eachChat.url)}   
             </div>
         {eachChat.type == 2 ?             <div className="chat-actions">
-                <button className="btn"><img src={PasteSVG} width={"16px"} className="pst-btn" /></button>
+                <Tooltip title="Paste"><button className="btn"><img src={PasteSVG} width={"16px"} className="pst-btn" /></button></Tooltip>
 
-                <button className="btn"><img src={LikeSVG} width={"16px"} className="like-btn" /></button>
-                <button className="btn"><img src={DislikeSVG} width={"16px"} className="dislike-btn" /></button>
-            </div> : ''}
+                <Tooltip title="Like"><button className="btn"><img src={LikeSVG} width={"16px"} className="like-btn" /></button></Tooltip>
+                <Tooltip title="Dislike"><button className="btn"><img src={DislikeSVG} width={"16px"} className="dislike-btn" /></button></Tooltip>
+            </div> 
+        :
+        ''
+        }
 
 
 
