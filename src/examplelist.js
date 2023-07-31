@@ -17,9 +17,9 @@ const ExampleList = () => {
                     </svg>Capabilities
                 </h2>
                 <ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md">Personalized Recommendations</li>
-                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md">Multi-language Support</li>
-                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md">Task Automation</li>
+                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md" style={{color:"white"}}>Personalized Recommendations</li>
+                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md" style={{color:"white"}}>Multi-language Support</li>
+                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md" style={{color:"white"}}>Task Automation</li>
                 </ul>
             </div>
             <div class="flex flex-col mb-8 md:mb-auto  flex-1 pt-16 pr-20 pl-5">
@@ -28,9 +28,9 @@ const ExampleList = () => {
                     </svg>Limitations
                 </h2>
                 <ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md">Security Concerns</li>
-                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md">Domain-Specific Knowledge</li>
-                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md">Unpredictable Errors</li>
+                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md" style={{color:"white"}}>Security Concerns</li>
+                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md" style={{color:"white"}}>Domain-Specific Knowledge</li>
+                    <li class="w-full bg-white text-blue-900 dark:bg-white/5 p-3 rounded-md" style={{color:"white"}}>Unpredictable Errors</li>
                 </ul>
             </div>
 
