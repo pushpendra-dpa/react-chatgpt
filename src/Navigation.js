@@ -7,22 +7,24 @@ const svg = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 
 </svg>
 const EachConversation = ({eachIndex, eachPrev, openOldConversation, deleteConversation, openEditModal})=>{
     // const []
-    return  (<button key={eachIndex} style={{ textAlign: "center", display: "flex", justifyContent: "center", padding:"10px" }} >
+    return  (<button key={eachIndex} style={{ textAlign: "center", display: "flex", justifyContent: "space-around", padding:"10px", width:'100%', alignItems:"center" }} >
     <div style={{margin: 'auto 0'}}>                        
         <MessageOutlined />
     </div>
-    <div type="text" onClick={()=>openOldConversation(eachIndex)} style={{padding:'0 10px'}}>{eachPrev.name}</div>
-    <div style={{margin: 'auto 2px'}}>                        
-        <Button icon={<EditOutlined />} onClick={()=>openEditModal(eachIndex)} />
-    </div>
-    <div style={{margin: 'auto 0'}}>                        
-        <Button icon={<DeleteOutlined />} onClick={()=>deleteConversation(eachIndex)} />
+    <div type="text" onClick={()=>openOldConversation(eachIndex)} style={{padding:'0 10px', minWidth: '100px'}}>{eachPrev.name}</div>
+    <div style={{display:'flex'}}>
+      <div style={{margin: 'auto 2px'}}>                        
+          <Button icon={<EditOutlined />} onClick={()=>openEditModal(eachIndex)} />
+      </div>
+      <div style={{margin: 'auto 0'}}>                        
+          <Button icon={<DeleteOutlined />} onClick={()=>deleteConversation(eachIndex)} />
+      </div>
     </div>
     </button>);
 }
 const Navigation = ({state, setState, setIsModalOpen}) => {
     const [editModal, setEditModal] = useState({isOpen: false, text: '', index: -1})
-    
+    const [modalInput, setModalInput] = useState('')
     const prevConversations = [
         "Assiting User Requests",
         "Playing with user",
@@ -99,6 +101,19 @@ const Navigation = ({state, setState, setIsModalOpen}) => {
       };
     
       const handleOk = () => {
+        setState(prev=>{
+          let changedConvs = prev.previousConversations.map((eachValue, eachi)=>{
+            if(eachi === editModal.index){
+              return {...eachValue,name : modalInput}
+            }else{
+              return eachValue
+            }
+          })
+
+          console.log(editModal)
+          console.log(changedConvs)
+          return {...prev, previousConversations: changedConvs}
+        })
         setEditModal(prev=>{return {...prev, isOpen:false, text: '', index: -1}});
       };
     
@@ -126,7 +141,12 @@ const Navigation = ({state, setState, setIsModalOpen}) => {
         </div>
         <Modal open={editModal.isOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
                 <Typography.Title level={4}> Edit Conversation</Typography.Title>
-                <Input placeholder={editModal.text} />
+                <Input value={modalInput}  onChange={(e)=>setModalInput(e.target.value)} placeholder={editModal.text} onKeyUp={(e)=>{
+                  console.log(e.keyCode)
+                  if(e.keyCode === 13){
+                    handleOk()
+                  }
+                }} />
                 <br />
                 <br />
                 <div style={{display:"flex", justifyContent:"end"}}><Button danger style={{margin: '0 10px'}} onClick={handleCancel}>Cancel</Button>
