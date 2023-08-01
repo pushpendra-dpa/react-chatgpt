@@ -1,7 +1,7 @@
 import os
 import openai
 from typing import Union
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Request, Body
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from modules.ChatGPT import ChatGPTAsk
@@ -45,16 +45,11 @@ def generate_random_string(length):
 def read_root():
     return {"Hello": "World"}
 
-
-@app.get("/ask_text/{text}")
-def read_item(text: str, q: Union[str, None] = None):
-    return ChatGPTAsk(text)
-
-@app.get("/ask/")
-def getAudioToChatGPTAnswer():
-    answer = VoiceToText()
-    chatGPTAnswer=ChatGPTAsk(answer["text"])
-    return TextToVoice(chatGPTAnswer)
+@app.post("/ask/")
+async def getChatGPTAnswer(payload:Request):
+    text = await payload.json()
+    chatGPTAnswer=ChatGPTAsk(text["content"])
+    return chatGPTAnswer
 
 @app.post("/uploadfile/")
 async def postAudioFile(file = File()):

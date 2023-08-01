@@ -1,74 +1,72 @@
 import "./prompt.css"
 import MicSVG from "./assets/mic.svg"
 import SendSVG from "./assets/send.svg"
-import { ReactMediaRecorder } from "react-media-recorder";
-import React from 'react'
-import axios from 'axios'
+import { Spin, Tooltip, message } from "antd/es"
+import { ReactMediaRecorder } from "react-media-recorder"
+import { useState } from "react"
+import { LoadingOutlined } from "@ant-design/icons"
+const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
+    const [text, setText] = useState('')
+    const [isLoading, setIsLoading] = useState({isText: false, isMic: false})
+    /*
+    
+    */
+   const onTextAsk = async ()=>{
+    if(text.length > 0){
+        console.log("BEFORE")
+        setIsLoading(prev=>{
+            return {...prev, isText: true, isMic: true}
+        })
+        setState(prev=>{
+            return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 1, content: text}]}}
+          })
 
+        setText('')
+        await getChatGPTAnswer(text)
+        setIsLoading(prev=>{
+            return {...prev, isText: false, isMic: false}
+        })
+        console.log("AFTER")
 
-const Prompt = ({ setState, state }) => {
-
-    const [TotalMessages, SetTotal] = React.useState([])
-
-    function ConvertBlobToUrl(data) {
-        const blob = new Blob([data], { type: "audio/mpeg" })
-        const rachelblobUrl = window.URL.createObjectURL(blob)
-        return rachelblobUrl
+    }else{
+        message.info("Please type something")
     }
+    
 
-    const handleStop = async (mediaBlobUrl) => {
-        console.log(mediaBlobUrl)
-        const myMessage = { "sender": "me", "audiobloburl": mediaBlobUrl }
-        const collectionOfMessages = [...TotalMessages, myMessage]
-
-
-        const response = await fetch(mediaBlobUrl)
-        const raw_data = await response.blob()
-        console.log(raw_data)
-
-        const form = new FormData()
-
-        form.append("file", raw_data, "myrecord.wav")
-
-        const res = await axios.post("http://127.0.0.1:8000/post-audio", form,
-
-            {
-
-                headers: { "Content-Type": "audio/mpeg" },
-                responseType: "arraybuffer"
-
-
-            }
-
-        )
-
-        console.log(res)
-
-        const binary_file = res.data
-        const rachelUrl = ConvertBlobToUrl(binary_file)
-        const rachelMessage = { sender: "rachel", audiobloburl: rachelUrl }
-        collectionOfMessages.push(rachelMessage)
-
-        console.log(collectionOfMessages)
-        SetTotal(collectionOfMessages)
-
+   }
+   const onRecordStop = (blobURL, blob)=>{
+    onStop(blobURL, blob)
+   }
+   const onEnterKey = (e)=>{
+    if(e.keyCode === 13){
+        onTextAsk()
     }
+   }
     return <div className="main-prompt">
         <div>
-            <input type="text" placeholder="Please Type here your prompt..." />
-            <div className="mic" onClick={() => setState(prev => { return { ...prev, isNewSession: false } })}>
-                <img src={SendSVG} width={"24px"} />
+            <input type="text" disabled={isLoading.isMic || isLoading.isText} onKeyUp={onEnterKey} onChange={e=>setText(e.target.value)} value={text} placeholder="Please Type here your prompt..." />
+            <div className="mic" onClick={(isLoading.isMic || isLoading.isText) ? ()=>message.info("Please Wait prev Request is processing!") : onTextAsk}>
+                <div   >              
+                    {isLoading.isText ? <LoadingOutlined style={{ fontSize: 24 }} spin /> : <img src={SendSVG} width={"24px"} />}
+                </div>
             </div>
             <div className="mic">
+                <div>
                 <ReactMediaRecorder
                     audio
-                    onStop={handleStop}
+                    onStop={onRecordStop}
                     render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
-                        <div onMouseDown={startRecording} onMouseUp={stopRecording}>
-                            <img src={MicSVG} width={"24px"} />
+                        <div onMouseDown={startRecording} onMouseUp={ stopRecording }>
+                            <Tooltip title={status}>         
+                            {isLoading.isText ? <LoadingOutlined style={{ fontSize: 24 }} spin /> :  <img src={MicSVG} width={"24px"} /> }
+                               
+                            </Tooltip>
+
                         </div>
                     )}
-                />
+                    />
+                    
+                </div>
             </div>
         </div>
     </div>
