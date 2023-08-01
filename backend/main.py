@@ -47,8 +47,8 @@ def read_root():
 
 @app.post("/ask/")
 async def getChatGPTAnswer(payload:Request):
-    text = await payload.json()
-    chatGPTAnswer=ChatGPTAsk(text["content"])
+    messages = await payload.json()
+    chatGPTAnswer=ChatGPTAsk(messages)
     return chatGPTAnswer
 
 @app.post("/uploadfile/")

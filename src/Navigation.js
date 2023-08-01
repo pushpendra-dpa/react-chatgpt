@@ -74,7 +74,8 @@ const Navigation = ({state, setState, setIsModalOpen}) => {
                         <div style={{margin: 'auto 0'}}>                        
                             <MessageOutlined />
                         </div>
-                        {eachPrev.name}</button>
+                        {eachPrev.name}
+                        </button>
                 })}
             </div>
         </div>

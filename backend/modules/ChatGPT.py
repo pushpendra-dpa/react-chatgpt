@@ -2,13 +2,9 @@ import os
 import openai
 
 
-
-def ChatGPTAsk(text):
+def ChatGPTAsk(messages):
     completion = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
-    messages=[
-        {"role": "user", "content": text}
-    ]
+    messages=messages
     )
-    print(completion)
     return completion.choices[0].message

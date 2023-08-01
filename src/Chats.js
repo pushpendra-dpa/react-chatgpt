@@ -21,13 +21,13 @@ const EachChat = ({ eachChat }) => {
         }
       }
     const AudioJSX = (url)=>(<div><audio src={url} width={500} height={500} controls /></div>)
-    return <div className={(eachChat.type == 1 ? "type1" : "type2") + " eachConversation"} style={{ display: "flex", justifyContent: "center" }}>
+    return <div className={(eachChat.role == "user" ? "type1" : "type2") + " eachConversation"} style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ width: "50%", display: "flex", justifyContent: "space-between" }}>
 
-            <div className="chat-content"><div><img src={eachChat.type == 1 ? UserSVG : ServerSVG} width={"24px"} style={{minWidth:'24px'}} /></div>
+            <div className="chat-content"><div><img src={eachChat.role == "user" ? UserSVG : ServerSVG} width={"24px"} style={{minWidth:'24px'}} /></div>
                 {eachChat.contentType !== 'audio' ? <>{eachChat.content}</> : AudioJSX(eachChat.url)}   
             </div>
-        {eachChat.type == 2 ?             <div className="chat-actions">
+        {eachChat.role == "assistant" ?             <div className="chat-actions">
                 <Tooltip title={copyState ? "✅ Response Copied!":"Paste"}><button onClick={()=>copyContent(eachChat.content)} className="btn"><img src={PasteSVG} width={"16px"} className="pst-btn" /></button></Tooltip>
 
                 <Tooltip title="Like"><button className="btn"><img src={LikeSVG} width={"16px"} className="like-btn" /></button></Tooltip>

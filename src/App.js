@@ -5,7 +5,7 @@ import Prompt from './Prompt';
 import Chats from './Chats';
 import { useEffect, useState } from 'react';
 import { Modal, message } from 'antd';
-let host = "https://chatgpt-server.pushpendrahpx.me/"
+let host = "https://pushpendra-dpa-musical-space-giggle-wr7rr4qgv9x6hg9g6-8000.preview.app.github.dev/";
 function App() {
   const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())} `, data: []}, previousConversations: []})
   const [isModalOpen, setIsModalOpen] = useState(true);
@@ -39,7 +39,7 @@ function App() {
     console.log("AFTER2")
     localStorage.setItem("store", JSON.stringify(state))
   },[state])
-  const getChatGPTAnswer = async (text)=>{
+  const getChatGPTAnswer = async (messages)=>{
     return new Promise(async (resolve, reject)=>{
       try {
         let response = await fetch(host+"ask/",{
@@ -47,11 +47,11 @@ function App() {
           headers:{
             'content-type':'application/json'
           },
-          body: JSON.stringify({content: text})
+          body: JSON.stringify(messages)
         })
         let data = await response.json()
         setState(prev=>{
-          return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 2, content: data.content}]}}
+          return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {role: "assistant", content: data.content}]}}
         })
         resolve(true)
       } catch (error) {
@@ -61,7 +61,7 @@ function App() {
   }
  const onStop = async (blobURL, blob)=>{
   setState(prev=>{
-    return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 1, content: blobURL, contentType: 'audio', url: blobURL}]}}
+    return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {role: "user", content: blobURL, contentType: 'audio', url: blobURL}]}}
   })
   let formData = new FormData()
   formData.append("file", blob)
@@ -81,7 +81,7 @@ function App() {
   
   let audioURL = URL.createObjectURL(audioBlob)
   setState(prev=>{
-    return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 2, content: audioURL, contentType: 'audio', url: audioURL}]}}
+    return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {role:"assistant", content: audioURL, contentType: 'audio', url: audioURL}]}}
   })
 
  } 
