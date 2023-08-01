@@ -7,12 +7,12 @@
 }
 
 .App>div:nth-child(1) {
-  width: 15vw;
+  width: 18vw;
   background: #dedede;
 }
 
 .App>div:nth-child(2) {
-  width: 85vw;
+  width: 82vw;
   color: #ffffff;
 }
 
