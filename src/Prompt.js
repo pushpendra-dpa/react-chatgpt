@@ -71,4 +71,5 @@ const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
         </div>
     </div>
 }
+
 export default Prompt;
