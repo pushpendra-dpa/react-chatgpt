@@ -24,7 +24,10 @@ const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
           })
 
         setText('')
-        await getChatGPTAnswer(overallChats)
+        let allData = overallChats.map((each)=>{
+            return {role:each.role, content: each.content}
+          })
+        await getChatGPTAnswer(allData)
         setIsLoading(prev=>{
             return {...prev, isText: false, isMic: false}
         })

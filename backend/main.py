@@ -1,7 +1,7 @@
 import os
 import openai
 from typing import Union
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request, Body
+from fastapi import FastAPI, File, UploadFile, HTTPException, Request, Body, Form
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from modules.ChatGPT import ChatGPTAsk
@@ -9,6 +9,7 @@ from modules.VoiceToText import VoiceToText
 from modules.TextToVoice import TextToVoice
 import string
 import random
+import json
 
 
 # Importing ENV Variables
@@ -52,8 +53,8 @@ async def getChatGPTAnswer(payload:Request):
     return chatGPTAnswer
 
 @app.post("/uploadfile/")
-async def postAudioFile(file = File()):
-    
+async def postAudioFile(messages=Form(...),file = File()):
+    print(messages)
     filename=generate_random_string(10)
     print(str(filename))
     filePath = "files/"+filename+".wav"
@@ -65,8 +66,13 @@ async def postAudioFile(file = File()):
     answer = VoiceToText(filename)
     print(answer)
     os.remove(filePath)
-    chatGPTAnswer=ChatGPTAsk(answer["text"])
+    
+    messages = json.loads(messages)
+    messages.append({"role": "user", "content":answer["text"]});
+    
+    chatGPTAnswer=ChatGPTAsk(messages)
     print(chatGPTAnswer)
+
     response = TextToVoice(chatGPTAnswer["content"])
     audio_output=response.content
     def iterfile():

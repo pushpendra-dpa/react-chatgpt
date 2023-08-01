@@ -8,3 +8,4 @@ def ChatGPTAsk(messages):
     messages=messages
     )
     return completion.choices[0].message
+
