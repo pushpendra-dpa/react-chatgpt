@@ -1,5 +1,5 @@
 import ExampleList from "./examplelist";
-const Example = () => {
+const Example = ({ setSample }) => {
 
     return (
 
@@ -18,7 +18,7 @@ const Example = () => {
             </div>
             {/*examples*/}
             <div>
-                <ExampleList />
+                <ExampleList setSample={setSample} />
 
             </div>
 

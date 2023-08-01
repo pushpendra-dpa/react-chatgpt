@@ -7,8 +7,10 @@ import { useEffect, useState } from 'react';
 import { Modal, message } from 'antd';
 let host = "https://chatgpt-server.pushpendrahpx.me/"
 function App() {
-  const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())} `, data: []}, previousConversations: []})
+  const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: { name: `Conversation ${((new Date()).getTime())} `, data: [] }, previousConversations: [] })
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [sample, setSample] = useState("")
+
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -22,36 +24,36 @@ function App() {
     setIsModalOpen(false);
   };
 
-  useEffect(()=>{
-      let data = localStorage.getItem("store")
-      console.log("INIT",data)
-      if(data){
-        
-        let json = JSON.parse(data)
-        console.log(json)
-        if(json){
-          json.isLoaded = true
-          setState(json)
-        }
+  useEffect(() => {
+    let data = localStorage.getItem("store")
+    console.log("INIT", data)
+    if (data) {
+
+      let json = JSON.parse(data)
+      console.log(json)
+      if (json) {
+        json.isLoaded = true
+        setState(json)
       }
-  },[])
-  useEffect(()=>{
+    }
+  }, [])
+  useEffect(() => {
     console.log("AFTER2")
     localStorage.setItem("store", JSON.stringify(state))
-  },[state])
-  const getChatGPTAnswer = async (text)=>{
-    return new Promise(async (resolve, reject)=>{
+  }, [state])
+  const getChatGPTAnswer = async (text) => {
+    return new Promise(async (resolve, reject) => {
       try {
-        let response = await fetch(host+"ask/",{
-          method:"POST",
-          headers:{
-            'content-type':'application/json'
+        let response = await fetch(host + "ask/", {
+          method: "POST",
+          headers: {
+            'content-type': 'application/json'
           },
-          body: JSON.stringify({content: text})
+          body: JSON.stringify({ content: text })
         })
         let data = await response.json()
-        setState(prev=>{
-          return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 2, content: data.content}]}}
+        setState(prev => {
+          return { ...prev, conversation: { ...prev.conversation, data: [...prev.conversation.data, { type: 2, content: data.content }] } }
         })
         resolve(true)
       } catch (error) {
@@ -59,66 +61,54 @@ function App() {
       }
     })
   }
- const onStop = async (blobURL, blob)=>{
-  setState(prev=>{
-    return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 1, content: blobURL, contentType: 'audio', url: blobURL}]}}
-  })
-  let formData = new FormData()
-  formData.append("file", blob)
-  let response = await fetch(host+"uploadfile/",{
-    method:"POST",
-    headers:{
-      'responseType':'arraybuffer'
-    },
-    body: formData
-  })
-  if(!response.ok){
-    message.error("Failed to upload/fetch audio")
-    return;
-  }
-  let buffer = await response.arrayBuffer()
-  let audioBlob = await new Blob([buffer])
-  
-  let audioURL = URL.createObjectURL(audioBlob)
-  setState(prev=>{
-    return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {type: 2, content: audioURL, contentType: 'audio', url: audioURL}]}}
-  })
+  const onStop = async (blobURL, blob) => {
+    setState(prev => {
+      return { ...prev, conversation: { ...prev.conversation, data: [...prev.conversation.data, { type: 1, content: blobURL, contentType: 'audio', url: blobURL }] } }
+    })
+    let formData = new FormData()
+    formData.append("file", blob)
+    let response = await fetch(host + "uploadfile/", {
+      method: "POST",
+      headers: {
+        'responseType': 'arraybuffer'
+      },
+      body: formData
+    })
+    if (!response.ok) {
+      message.error("Failed to upload/fetch audio")
+      return;
+    }
+    let buffer = await response.arrayBuffer()
+    let audioBlob = await new Blob([buffer])
 
- } 
+    let audioURL = URL.createObjectURL(audioBlob)
+    setState(prev => {
+      return { ...prev, conversation: { ...prev.conversation, data: [...prev.conversation.data, { type: 2, content: audioURL, contentType: 'audio', url: audioURL }] } }
+    })
+
+  }
   return (
     <div className="App">
-      <Navigation state={state} setState={setState} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+      <Navigation state={state} setState={setState} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       <div className='main-screen'>
-        {state.conversation.data.length == 0 ? <Example /> : <Chats content={state.conversation.data} />}
-        <Prompt setState={setState} state={state} getChatGPTAnswer={getChatGPTAnswer} onStop={onStop} />
+        {state.conversation.data.length == 0 ? <Example sample={sample} setSample={setSample} /> : <Chats content={state.conversation.data} />}
+        <Prompt setState={setState} state={state} getChatGPTAnswer={getChatGPTAnswer} onStop={onStop} sample={sample} setSample={setSample} />
       </div>
       <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
-      <div className="modal-overlay">
+        <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-body">
-              <h2>Welcome to ChatGPT Clone</h2>
+              <h2>Welcome to dpaGPT.</h2>
               <p>
-                You are using a clone of the ChatGPT UI. This is a simple web app that provides an interactive chat
-                experience using the GPT-3.5 language model.
+                Hey there! I'm dpaGPT, your friendly AI chatbot. Whether you need help, want to have a fun chat, or just looking for some company, I'm here for you 24/7. Just type your message, and I'll do my best to assist you with anything you need.
               </p>
-              <p>
-                You can type your messages in the chat input, and the AI will respond to your queries and provide
-                relevant information.
-              </p>
-              <h3>How to use:</h3>
-              <ol>
-                <li>Type your message in the chat input box.</li>
-                <li>Press Enter or click on the Send button to send the message.</li>
-                <li>Wait for the AI's response to appear in the chat window.</li>
-                <li>
-                  Have fun experimenting with different queries and engaging in natural conversations with the AI!
-                </li>
-              </ol>
+
+
               <p>
                 Please note that this is a demo application, and the AI's responses are generated based on the data it
                 has been trained on. Therefore, it may not always provide accurate or complete information.
               </p>
-              <p>Enjoy your experience with ChatGPT Clone!</p>
+              <p>Enjoy your experience with dpaGPT!</p>
             </div>
           </div>
         </div>
