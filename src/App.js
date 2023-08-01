@@ -5,7 +5,7 @@ import Prompt from './Prompt';
 import Chats from './Chats';
 import { useEffect, useState } from 'react';
 import { Modal, message } from 'antd';
-let host = "https://pushpendra-dpa-musical-space-giggle-wr7rr4qgv9x6hg9g6-8000.preview.app.github.dev/";
+let host = "https://chatgpt-server.pushpendrahpx.me/";
 function App() {
   const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())} `, data: []}, previousConversations: []})
   const [isModalOpen, setIsModalOpen] = useState(true);
