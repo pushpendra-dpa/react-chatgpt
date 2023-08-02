@@ -13,7 +13,7 @@ const Example = ({setForcedText}) => {
             </div>
             {/*heading*/}
             <div  >
-                <h1 class="text-center font-bold text-4xl pt-20 ">dpaGPT</h1>
+                <h1 class="text-center font-bold text-4xl pt-20 ">ChatGPT+ </h1>
 
             </div>
             {/*examples*/}

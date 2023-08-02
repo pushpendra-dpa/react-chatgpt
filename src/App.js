@@ -9,6 +9,8 @@ let host = "https://chatgpt-server.pushpendrahpx.me/";
 function App() {
   const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())} `, data: []}, previousConversations: []})
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [forcedText, setForcedText] = useState('')
   const showModal = () => {
     setIsModalOpen(true);
@@ -41,6 +43,12 @@ function App() {
   },[state])
   const getChatGPTAnswer = async (messages)=>{
     return new Promise(async (resolve, reject)=>{
+
+      messageApi.loading({
+        type: 'loading',
+        content: 'Responding to your message..',
+        duration: 0,
+      })
       try {
         let response = await fetch(host+"ask/",{
           method:"POST",
@@ -53,14 +61,26 @@ function App() {
         setState(prev=>{
           return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {role: "assistant", content: data.content}]}}
         })
+        messageApi.destroy()
+
+        message.success("Got the response")
         resolve(true)
       } catch (error) {
+        messageApi.destroy()
+
+        message.error("Failed to Response")
         reject(false)
       }
     })
   }
  const onStop = async (blobURL, blob)=>{
-  // setState(prev=>{
+  messageApi.loading({
+    type: 'loading',
+    content: 'Converting your audio to text...',
+    duration: 0,
+  })
+  try {
+     // setState(prev=>{
   //   return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {role: "user", content: '', contentType: 'audio', url: blobURL}]}}
   // })
   let reader = new FileReader();
@@ -106,7 +126,12 @@ function App() {
   allMessages.push({role: 'user', content: voiceToTextData})
   prevOlds.push({role: 'user', content: voiceToTextData})
   console.log(allMessages)
-
+  messageApi.destroy()
+  messageApi.loading({
+    type: 'loading',
+    content: 'Getting Response from Bot...',
+    duration: 0,
+  })
   // Now asking to ChatGPT
   response = await fetch(host+"ask/",{
     method:"POST",
@@ -131,6 +156,13 @@ function App() {
 
   setState(prev=>{
     return {...prev, conversation: {...prev.conversation, data: prevOlds}}
+  })
+
+  messageApi.destroy()
+  messageApi.loading({
+    type: 'loading',
+    content: 'Converting Response into Audio...',
+    duration: 0,
   })
 
   // Text to voice
@@ -167,6 +199,9 @@ function App() {
   setState(prev=>{
     return {...prev, conversation: {...prev.conversation, data: prevOlds}}
   })
+
+  messageApi.destroy()
+  messageApi.success("Response Completed!")
   // console.log(response)
 
 
@@ -179,9 +214,13 @@ function App() {
   //   return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {role:"assistant", content: '', contentType: 'audio', url: audioURL}]}}
   // })
 
+  } catch (error) {
+    
+  }
  } 
   return (
     <div className="App">
+      {contextHolder}
       <Navigation state={state} setState={setState} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
       <div className='main-screen'>
         {state.conversation.data.length == 0 ? <Example setForcedText={setForcedText} /> : <Chats content={state.conversation.data} />}
@@ -191,9 +230,9 @@ function App() {
       <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-body">
-              <h2>Welcome to ChatGPT Clone</h2>
+              <h2>Welcome to ChatGPT+</h2>
               <p>
-                You are using a clone of the ChatGPT UI. This is a simple web app that provides an interactive chat
+                You are using a ChatGPT+ UI. This is a simple web app that provides an interactive chat
                 experience using the GPT-3.5 language model.
               </p>
               <p>
@@ -213,7 +252,7 @@ function App() {
                 Please note that this is a demo application, and the AI's responses are generated based on the data it
                 has been trained on. Therefore, it may not always provide accurate or complete information.
               </p>
-              <p>Enjoy your experience with ChatGPT Clone!</p>
+              <p>Enjoy your experience with ChatGPT+!</p>
             </div>
           </div>
         </div>
