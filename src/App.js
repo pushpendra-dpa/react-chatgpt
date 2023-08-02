@@ -9,7 +9,7 @@ let host = "https://chatgpt-server.pushpendrahpx.me/";
 function App() {
   const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())} `, data: []}, previousConversations: []})
   const [isModalOpen, setIsModalOpen] = useState(true);
-
+  const [forcedText, setForcedText] = useState('')
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -184,8 +184,8 @@ function App() {
     <div className="App">
       <Navigation state={state} setState={setState} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
       <div className='main-screen'>
-        {state.conversation.data.length == 0 ? <Example /> : <Chats content={state.conversation.data} />}
-        <Prompt setState={setState} state={state} getChatGPTAnswer={getChatGPTAnswer} onStop={onStop} />
+        {state.conversation.data.length == 0 ? <Example setForcedText={setForcedText} /> : <Chats content={state.conversation.data} />}
+        <Prompt setState={setState} state={state} getChatGPTAnswer={getChatGPTAnswer} onStop={onStop} forcedText={forcedText} />
       </div>
       <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
       <div className="modal-overlay">

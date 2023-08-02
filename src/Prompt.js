@@ -3,14 +3,17 @@ import MicSVG from "./assets/mic.svg"
 import SendSVG from "./assets/send.svg"
 import { Spin, Tooltip, message } from "antd/es"
 import { ReactMediaRecorder } from "react-media-recorder"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { LoadingOutlined } from "@ant-design/icons"
-const Prompt = ({ setState, state, getChatGPTAnswer, onStop }) => {
+const Prompt = ({ setState, state, getChatGPTAnswer, onStop, forcedText }) => {
     const [text, setText] = useState('')
     const [isLoading, setIsLoading] = useState({isText: false, isMic: false})
     /*
     
     */
+   useEffect(()=>{
+    setText(forcedText)
+   },[forcedText])
    const onTextAsk = async ()=>{
     if(text.length > 0){
         console.log("BEFORE")
