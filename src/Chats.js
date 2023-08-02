@@ -5,7 +5,7 @@ import PasteSVG from "./assets/paste.svg"
 import LikeSVG from "./assets/like.svg"
 import DislikeSVG from "./assets/dislike.svg"
 import { Tooltip } from "antd"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 const EachChat = ({ eachChat }) => {
     const [copyState, setCopyState] = useState(false)
     const copyContent = async (text) => {
@@ -20,12 +20,42 @@ const EachChat = ({ eachChat }) => {
           console.error('Failed to copy: ', err);
         }
       }
-    const AudioJSX = (url, content)=>(<div>{content}<br />{url ? <audio src={url} width={500} height={500} controls /> : ''}</div>)
+      const AUDIOElement = ({url})=>{
+        const [blobURL, setBlobURL] = useState('')
+        
+        const octetStreamToURL = async ()=>{
+            try {
+              let response = await fetch(localStorage.getItem(url))
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+            let arrayBuffer = await response.arrayBuffer();
+            let blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+            let bu = URL.createObjectURL(blob)
+            setBlobURL(bu)
+            console.log(bu)
+            } catch (error) {
+                console.log(error)
+            }
+         }
+        useEffect(()=>{
+          octetStreamToURL()
+        },[])
+      
+
+        return <audio src={blobURL} width={500} height={500} controls />
+      }
+    const AudioJSX = (url, content)=>{
+        
+        return (<div>{url ? <AUDIOElement url={ url} /> : ''}</div>)
+    }
     return <div className={(eachChat.role == "user" ? "type1" : "type2") + " eachConversation"} style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ width: "50%", display: "flex", justifyContent: "space-between" }}>
 
             <div className="chat-content"><div><img src={eachChat.role == "user" ? UserSVG : ServerSVG} width={"24px"} style={{minWidth:'24px'}} /></div>
-                {eachChat.contentType !== 'audio' ? <>{eachChat.content}</> : AudioJSX(eachChat.url, eachChat.content)}   
+            <div style={{display:"flex", flexDirection:"column"}}>
+                <div>{eachChat.content}</div> <br /> {eachChat.contentType === 'audio' ?  AudioJSX(eachChat.url, eachChat.content) : ''}   
+            </div>
             </div>
         {eachChat.role == "assistant" ?             <div className="chat-actions">
                 <Tooltip title={copyState ? "✅ Response Copied!":"Paste"}><button onClick={()=>copyContent(eachChat.content)} className="btn"><img src={PasteSVG} width={"16px"} className="pst-btn" /></button></Tooltip>

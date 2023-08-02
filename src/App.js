@@ -63,6 +63,16 @@ function App() {
   // setState(prev=>{
   //   return {...prev, conversation: {...prev.conversation, data: [...prev.conversation.data, {role: "user", content: '', contentType: 'audio', url: blobURL}]}}
   // })
+  let reader = new FileReader();
+  reader.addEventListener('load', () => {
+    localStorage.setItem(blobURL, reader.result);
+  });
+  // Read the contents of the specified Blob or File
+  reader.readAsDataURL(blob);
+
+
+
+  
   let allData = state.conversation.data.map((each)=>{
     return {role:each.role, content: each.content}
   })
@@ -108,6 +118,8 @@ function App() {
   }
   let data = await response.json()
   console.log(data)
+  allMessages[allMessages.length-1].contentType = 'audio';
+  allMessages[allMessages.length-1].url = blobURL
   allMessages.push({role: 'assistant', content: data.content})
   setState(prev=>{
     return {...prev, conversation: {...prev.conversation, data: allMessages}}
@@ -128,8 +140,16 @@ function App() {
   }
   let buffer = await response.arrayBuffer()
   let audioBlob = await new Blob([buffer])
-  
+
   let audioURL = URL.createObjectURL(audioBlob)
+  
+  reader = new FileReader();
+  reader.addEventListener('load', () => {
+    localStorage.setItem(audioURL, reader.result);
+  });
+  reader.readAsDataURL(audioBlob);
+
+  // Read the contents of the specified Blob or File
   allMessages[allMessages.length-1].contentType = 'audio'
   allMessages[allMessages.length-1].url = audioURL;
   setState(prev=>{
