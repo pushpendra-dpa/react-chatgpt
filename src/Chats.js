@@ -20,12 +20,12 @@ const EachChat = ({ eachChat }) => {
           console.error('Failed to copy: ', err);
         }
       }
-    const AudioJSX = (url)=>(<div><audio src={url} width={500} height={500} controls /></div>)
+    const AudioJSX = (url, content)=>(<div>{content}<br />{url ? <audio src={url} width={500} height={500} controls /> : ''}</div>)
     return <div className={(eachChat.role == "user" ? "type1" : "type2") + " eachConversation"} style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ width: "50%", display: "flex", justifyContent: "space-between" }}>
 
             <div className="chat-content"><div><img src={eachChat.role == "user" ? UserSVG : ServerSVG} width={"24px"} style={{minWidth:'24px'}} /></div>
-                {eachChat.contentType !== 'audio' ? <>{eachChat.content}</> : AudioJSX(eachChat.url)}   
+                {eachChat.contentType !== 'audio' ? <>{eachChat.content}</> : AudioJSX(eachChat.url, eachChat.content)}   
             </div>
         {eachChat.role == "assistant" ?             <div className="chat-actions">
                 <Tooltip title={copyState ? "✅ Response Copied!":"Paste"}><button onClick={()=>copyContent(eachChat.content)} className="btn"><img src={PasteSVG} width={"16px"} className="pst-btn" /></button></Tooltip>

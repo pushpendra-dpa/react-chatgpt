@@ -46,15 +46,9 @@ def generate_random_string(length):
 def read_root():
     return {"Hello": "World"}
 
-@app.post("/ask/")
-async def getChatGPTAnswer(payload:Request):
-    messages = await payload.json()
-    chatGPTAnswer=ChatGPTAsk(messages)
-    return chatGPTAnswer
+@app.post("/voiceToText/")
+async def voiceToTextView(file=File()):
 
-@app.post("/uploadfile/")
-async def postAudioFile(messages=Form(...),file = File()):
-    print(messages)
     filename=generate_random_string(10)
     print(str(filename))
     filePath = "files/"+filename+".wav"
@@ -66,6 +60,35 @@ async def postAudioFile(messages=Form(...),file = File()):
     answer = VoiceToText(filename)
     print(answer)
     os.remove(filePath)
+    return {'content': answer}
+
+
+
+@app.post("/ask/")
+async def getChatGPTAnswer(payload:Request):
+    messages = await payload.json()
+    chatGPTAnswer=ChatGPTAsk(messages)
+    return chatGPTAnswer
+
+
+@app.post("/textToVoice/")
+async def textToVoice(payload:Request):
+    body = await payload.json()
+    content = body['text']
+    response = TextToVoice(content)
+    audio_output=response.content
+    def iterfile():
+
+        yield audio_output
+
+    # Use for Post: Return output audio
+
+    return StreamingResponse(iterfile(), media_type="application/octet-stream")
+
+
+@app.post("/uploadfile/")
+async def postAudioFile(messages=Form(...),file = File()):
+    
     
     messages = json.loads(messages)
     messages.append({"role": "user", "content":answer["text"]});
@@ -73,14 +96,4 @@ async def postAudioFile(messages=Form(...),file = File()):
     chatGPTAnswer=ChatGPTAsk(messages)
     print(chatGPTAnswer)
 
-    response = TextToVoice(chatGPTAnswer["content"])
-    audio_output=response.content
-    def iterfile():
-
-        yield audio_output
-
- 
-
-    # Use for Post: Return output audio
-
-    return StreamingResponse(iterfile(), media_type="application/octet-stream")
+    
