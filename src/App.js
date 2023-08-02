@@ -216,6 +216,8 @@ function App() {
 
   } catch (error) {
     
+  messageApi.destroy()
+  messageApi.error("Something Failed!")
   }
  } 
   return (
