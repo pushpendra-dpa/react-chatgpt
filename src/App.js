@@ -93,7 +93,9 @@ function App() {
   }
   let voiceToTextData = await response.json()
   voiceToTextData = voiceToTextData.content.text
-
+  let prevOlds = state.conversation.data.map((each)=>{
+    return each
+  })
   let allMessages = state.conversation.data.map((each)=>{
     if('url' in each){
       return {role: each.role, content: each.content}
@@ -102,6 +104,7 @@ function App() {
     }
   })
   allMessages.push({role: 'user', content: voiceToTextData})
+  prevOlds.push({role: 'user', content: voiceToTextData})
   console.log(allMessages)
 
   // Now asking to ChatGPT
@@ -121,8 +124,13 @@ function App() {
   allMessages[allMessages.length-1].contentType = 'audio';
   allMessages[allMessages.length-1].url = blobURL
   allMessages.push({role: 'assistant', content: data.content})
+  
+  prevOlds[prevOlds.length-1].contentType = 'audio';
+  prevOlds[prevOlds.length-1].url = blobURL
+  prevOlds.push({role: 'assistant', content: data.content})
+
   setState(prev=>{
-    return {...prev, conversation: {...prev.conversation, data: allMessages}}
+    return {...prev, conversation: {...prev.conversation, data: prevOlds}}
   })
 
   // Text to voice
@@ -139,7 +147,7 @@ function App() {
     return;
   }
   let buffer = await response.arrayBuffer()
-  let audioBlob = await new Blob([buffer])
+  let audioBlob = await new Blob([buffer],  { type: 'audio/wav' })
 
   let audioURL = URL.createObjectURL(audioBlob)
   
@@ -152,8 +160,12 @@ function App() {
   // Read the contents of the specified Blob or File
   allMessages[allMessages.length-1].contentType = 'audio'
   allMessages[allMessages.length-1].url = audioURL;
+  
+  prevOlds[prevOlds.length-1].contentType = 'audio'
+  prevOlds[prevOlds.length-1].url = audioURL;
+  
   setState(prev=>{
-    return {...prev, conversation: {...prev.conversation, data: allMessages}}
+    return {...prev, conversation: {...prev.conversation, data: prevOlds}}
   })
   // console.log(response)
 

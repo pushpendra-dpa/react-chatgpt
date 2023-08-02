@@ -20,34 +20,10 @@ const EachChat = ({ eachChat }) => {
           console.error('Failed to copy: ', err);
         }
       }
-      const AUDIOElement = ({url})=>{
-        const [blobURL, setBlobURL] = useState('')
-        
-        const octetStreamToURL = async ()=>{
-            try {
-              let response = await fetch(localStorage.getItem(url))
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-            let arrayBuffer = await response.arrayBuffer();
-            let blob = new Blob([arrayBuffer], { type: 'audio/wav' });
-            let bu = URL.createObjectURL(blob)
-            setBlobURL(bu)
-            console.log(bu)
-            } catch (error) {
-                console.log(error)
-            }
-         }
-        useEffect(()=>{
-          octetStreamToURL()
-        },[])
       
-
-        return <audio src={blobURL} width={500} height={500} controls />
-      }
     const AudioJSX = (url, content)=>{
         
-        return (<div>{url ? <AUDIOElement url={ url} /> : ''}</div>)
+        return (<div>{url ? <audio src={localStorage.getItem(url) ? localStorage.getItem(url) : url} width={500} height={500} controls /> : ''}</div>)
     }
     return <div className={(eachChat.role == "user" ? "type1" : "type2") + " eachConversation"} style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ width: "50%", display: "flex", justifyContent: "space-between" }}>
