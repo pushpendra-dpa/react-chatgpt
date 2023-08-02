@@ -15,7 +15,7 @@
 .navigation button {
     color: #ffffff;
     outline: none;
-    padding: 10px;
+    /* padding: 10px; */
     border-radius: 10px;
 
     background-color: transparent;

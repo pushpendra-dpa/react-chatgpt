@@ -1,7 +1,7 @@
 import os
 import openai
 from typing import Union
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request, Body
+from fastapi import FastAPI, File, UploadFile, HTTPException, Request, Body, Form
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from modules.ChatGPT import ChatGPTAsk
@@ -9,6 +9,7 @@ from modules.VoiceToText import VoiceToText
 from modules.TextToVoice import TextToVoice
 import string
 import random
+import json
 
 
 # Importing ENV Variables
@@ -45,15 +46,9 @@ def generate_random_string(length):
 def read_root():
     return {"Hello": "World"}
 
-@app.post("/ask/")
-async def getChatGPTAnswer(payload:Request):
-    text = await payload.json()
-    chatGPTAnswer=ChatGPTAsk(text["content"])
-    return chatGPTAnswer
+@app.post("/voiceToText/")
+async def voiceToTextView(file=File()):
 
-@app.post("/uploadfile/")
-async def postAudioFile(file = File()):
-    
     filename=generate_random_string(10)
     print(str(filename))
     filePath = "files/"+filename+".wav"
@@ -65,16 +60,40 @@ async def postAudioFile(file = File()):
     answer = VoiceToText(filename)
     print(answer)
     os.remove(filePath)
-    chatGPTAnswer=ChatGPTAsk(answer["text"])
-    print(chatGPTAnswer)
-    response = TextToVoice(chatGPTAnswer["content"])
+    return {'content': answer}
+
+
+
+@app.post("/ask/")
+async def getChatGPTAnswer(payload:Request):
+    messages = await payload.json()
+    chatGPTAnswer=ChatGPTAsk(messages)
+    return chatGPTAnswer
+
+
+@app.post("/textToVoice/")
+async def textToVoice(payload:Request):
+    body = await payload.json()
+    content = body['text']
+    response = TextToVoice(content)
     audio_output=response.content
     def iterfile():
 
         yield audio_output
 
- 
-
     # Use for Post: Return output audio
 
     return StreamingResponse(iterfile(), media_type="application/octet-stream")
+
+
+@app.post("/uploadfile/")
+async def postAudioFile(messages=Form(...),file = File()):
+    
+    
+    messages = json.loads(messages)
+    messages.append({"role": "user", "content":answer["text"]});
+    
+    chatGPTAnswer=ChatGPTAsk(messages)
+    print(chatGPTAnswer)
+
+    
