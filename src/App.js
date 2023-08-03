@@ -4,7 +4,7 @@ import Example from './Example';
 import Prompt from './Prompt';
 import Chats from './Chats';
 import { useEffect, useState } from 'react';
-import { Modal, message } from 'antd';
+import { Avatar, List, Modal, Typography, message } from 'antd';
 let host = "https://chatgpt-server.pushpendrahpx.me/";
 function App() {
   const [state, setState] = useState({ isLoaded: false, isNewSession: true, conversation: {name: `Conversation ${((new Date()).getTime())} `, data: []}, previousConversations: []})
@@ -220,6 +220,29 @@ function App() {
   messageApi.error("Something Failed!")
   }
  } 
+ const data = [{
+  href: 'https://pushpendrahpx.me',
+  title: <u>Pushpendra Vishwakarma</u>,
+  avatar: `https://avatars.githubusercontent.com/u/48829314?v=4`,
+ },{
+  href: 'https://github.com/durgesh2216',
+  title: <u>Durgesh Bagade</u>,
+  avatar: `https://avatars.githubusercontent.com/u/140599158?v=4`,
+ },{
+  href: 'https://github.com/ashrith-dpa',
+  title: <u>Ashrith Kumar</u>,
+  avatar: `https://avatars.githubusercontent.com/u/140599227?v=4`,
+ },{
+  href: 'https://github.com/hitesh-dpa',
+  title: <u>Hitesh Kumawat</u>,
+  avatar: `https://avatars.githubusercontent.com/u/140599266?v=4`,
+ },{
+  title: 'Siddhant Yadav',
+  avatar: `https://avatars.githubusercontent.com/u/140601433?v=4`,
+ },{
+  title: 'Surendra Kumar',
+  avatar: `https://avatars.githubusercontent.com/u/140600696?v=4`,
+ },]
   return (
     <div className="App">
       {contextHolder}
@@ -241,20 +264,40 @@ function App() {
                 You can type your messages in the chat input, and the AI will respond to your queries and provide
                 relevant information.
               </p>
-              <h3>How to use:</h3>
-              <ol>
-                <li>Type your message in the chat input box.</li>
-                <li>Press Enter or click on the Send button to send the message.</li>
-                <li>Wait for the AI's response to appear in the chat window.</li>
-                <li>
-                  Have fun experimenting with different queries and engaging in natural conversations with the AI!
-                </li>
-              </ol>
               <p>
                 Please note that this is a demo application, and the AI's responses are generated based on the data it
                 has been trained on. Therefore, it may not always provide accurate or complete information.
               </p>
               <p>Enjoy your experience with ChatGPT+!</p>
+
+
+              <Typography.Title level={5}>Developed by</Typography.Title >
+              <List
+                itemLayout="vertical"
+                size="large"
+                dataSource={data}
+                renderItem={(item) => (
+                  <List.Item
+                    key={item.title}
+                    style={{padding: 0}}
+                   
+                  >
+                    <List.Item.Meta
+                      avatar={<Avatar src={item.avatar} />}
+                      title={<a href={item.href}>{item.title}</a>}
+                      description={item.description}
+                    />
+                  </List.Item>
+                )}
+              />
+              {/* <ol>
+                <li><a href="https://pushpendrahpx.me"><u>Pushpendra Vishwakarma</u></a></li>
+                <li><a href="https://github.com/durgesh2216">Durgesh Bagade</a></li>
+                <li>Ashrith Kumar</li>
+                <li>Hitesh Kumawat</li>
+                <li>Siddhant Yadav</li>
+                <li>Surendra Kumar</li>
+              </ol> */}
             </div>
           </div>
         </div>
