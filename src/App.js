@@ -224,18 +224,22 @@ function App() {
   href: 'https://pushpendrahpx.me',
   title: <u>Pushpendra Vishwakarma</u>,
   avatar: `https://avatars.githubusercontent.com/u/48829314?v=4`,
+  description: 'Team Lead'
  },{
   href: 'https://github.com/durgesh2216',
   title: <u>Durgesh Bagade</u>,
   avatar: `https://avatars.githubusercontent.com/u/140599158?v=4`,
+  description: 'Creative Head'
  },{
   href: 'https://github.com/ashrith-dpa',
   title: <u>Ashrith Kumar</u>,
   avatar: `https://avatars.githubusercontent.com/u/140599227?v=4`,
+  description: 'Creative Head'
  },{
   href: 'https://github.com/hitesh-dpa',
   title: <u>Hitesh Kumawat</u>,
   avatar: `https://avatars.githubusercontent.com/u/140599266?v=4`,
+  description: 'Creative Head'
  },{
   title: 'Siddhant Yadav',
   avatar: `https://avatars.githubusercontent.com/u/140601433?v=4`,
