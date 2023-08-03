@@ -69,9 +69,10 @@ npm start
 
 - Pushpendra Vishwakarma
 - Durgesh Bagade
-- Ashrith
+- Ashrith Kumar
 - Hitesh Kumawat
-- 2 More
+- Siddhant Yadav
+- Surendra Kumar
 
 ## Deployment
 
