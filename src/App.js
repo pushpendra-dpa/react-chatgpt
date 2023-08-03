@@ -241,10 +241,10 @@ function App() {
   avatar: `https://avatars.githubusercontent.com/u/140599266?v=4`,
   description: 'Creative Head'
  },{
-  title: 'Siddhant Yadav',
+  title: <u>Siddhant Yadav</u>,
   avatar: `https://avatars.githubusercontent.com/u/140601433?v=4`,
  },{
-  title: 'Surendra Kumar',
+  title: <u>Surendra Kumar</u>,
   avatar: `https://avatars.githubusercontent.com/u/140600696?v=4`,
  },]
   return (
@@ -274,7 +274,7 @@ function App() {
               </p>
               <p>Enjoy your experience with ChatGPT+!</p>
 
-
+              <a href="https://github.com/pushpendra-dpa/react-chatgpt"><strong><u>Codebase - Github Link</u></strong></a><br />
               <Typography.Title level={5}>Developed by</Typography.Title >
               <List
                 itemLayout="vertical"
